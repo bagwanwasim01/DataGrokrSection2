@@ -1,0 +1,187 @@
+1.Rest API which supports the following operations on Library data set -
+ i. Insert, update and select on Books
+ This API provides a CRUD operations like creating a book record, reading/selecting single or all book records and updating a record after requesting respective API call using postman.
+
+
+The following operations are related to Books table:
+
+1. Reading single or all records from Books table
+
+REQUEST SYNTAX for fetching all records
+
+ https://localhost:44353/api/books
+
+URI Request Parameters
+
+ No request parameter required.
+
+RESPONSE from API call
+ [
+ {
+ bookId: 1,
+ isbn: null,
+ abbrv: "TSAGF",
+ bookTitle: "The Subtle art of not giving a fuck",
+ totalPages: 212,
+ authorId: 5
+ },
+ {
+ bookId: 2,
+ isbn: null,
+ abbrv: "RDPD",
+ bookTitle: "Rich Dad Poor Dad",
+ totalPages: 189,
+ authorId: 2
+ }
+ ]
+
+
+ Requested book record will be displayed from BookBDL Business Layer using below
+
+ [HttpGet]
+ public async Task<ActionResult<IEnumerable<BooksBDL>>> GetBooks()
+
+ return await _context.Books
+ .Select(books => new BooksBDL()
+ {
+ BookId = books.BookId,
+ Isbn = books.Isbn,
+ BookTitle = books.BookTitle,
+ TotalPages = books.TotalPages,
+ Abbrv = books.Abbrv,
+ AuthorId = books.AuthorId, 
+ })
+ .ToListAsync();
+
+
+REQUEST SYNTAX for fetching single record using pk(BookID)
+
+   https://localhost:44353/api/books/<BookID>
+  e.g.
+   https://localhost:44353/api/books/1
+
+URI Request Parameters
+
+  The request uses the following URI parameters.
+
+  <bookId>
+
+      Above 1 is <bookId> of book that identifies book. This request parameter must be specified in function that is calling an API, Here in this case function name is
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BooksBDL>> GetBook(int id)
+
+      Requested book record will be displayed from BookBDL Business Layer using below
+
+       return await _context.Books
+                     .Where(a => a.BookId == id)
+                    .Select(books => new BooksBDL()
+                    {
+                        BookId = books.BookId,
+                        Isbn = books.Isbn,
+                        BookTitle = books.BookTitle,
+                        TotalPages = books.TotalPages,
+                        Abbrv = books.Abbrv,
+                        AuthorId = books.AuthorId,
+                    })
+                    .FirstOrDefaultAsync();
+
+    Required: Yes
+
+RESPONSE from API call
+      {		
+		bookId: 2,
+		isbn: null,
+		abbrv: "RDPD",
+		bookTitle: "Rich Dad Poor Dad",
+		totalPages: 189,
+		authorId: 2
+      }
+
+Method Used: GET
+
+If the action is successful, the service sends back an HTTP 20O response with OK status on Postman.
+
+
+2. Inserting record into Book table
+
+REQUEST SYNTAX for inserting record into customer table
+
+  https://localhost:44353/api/books
+
+  URI Request Parameters
+
+    No request parameter required.
+
+Method Used: POST
+
+    Make a POST request to https://localhost:44353/api/books/ and go to Headers tab and input Key as Content-Type
+    Value as Application/json, Selecting Body tab and data to be inputted as Form-data and put keys and values
+    like AuthorId,Abbrv,BookTitle,TotalPages,BookId
+
+    Considering below lines to be specified API function call
+
+	 PostBook([FromForm]BooksBDL book)
+    
+	I have checked the abbreviation field from Books Table, If any post request contains same abbrv for book then it returns result as 
+
+             return Conflict("Book already exists");
+	To handle exception for adding Authors who are not present in the
+	table
+            bool alreadyexist = authorlist.Any(aId => aId.AuthorId == book.AuthorId);
+            if (alreadyexist)
+            {
+                bookDetails.AuthorId = book.AuthorId;
+                bookDetails.Abbrv = book.Abbrv;
+                bookDetails.BookTitle = book.BookTitle;
+                bookDetails.TotalPages = book.TotalPages;
+                bookDetails.BookId = book.BookId;
+               
+            }
+            else
+            {
+                return Conflict("Author not exists");
+            }  
+            _context.Books.Add(bookDetails);
+
+If the action is successful, the service sends back an HTTP 201 response with OK status on Postman.
+
+
+3. Updating record from Book table
+
+REQUEST SYNTAX for updating record from book table using pk(BookID)
+
+  https://localhost:44353/api/books/<bookID>
+  e.g.
+  https://localhost:44353/api/books/2
+
+URI Request Parameters
+
+    The request uses the following URI parameters.
+
+    <bookID>
+        Above 2 is <bookID> of book that identifies book record. This request parameter must be specified in function that is calling an API, Here in this case function name is
+
+        PutBook(int id, [From Form] BooksBDL book)
+
+        Requested book record will be updated from Book Model using below
+
+        _context.Entry(bookDetails).State = EntityState.Modified;
+
+      Required: Yes
+
+  Method Used : PUT
+
+      Make a PUT request to https://localhost:44353/api/books/<bookID> and go to Headers tab and input Key as Content-Type
+      Value as Application/json, Selecting Body tab and data to be inputted as raw and put keys and values
+      like AuthorId, Abbrv, BookTitle,TotalPages,BookId,etc to be updated.
+
+      
+
+  If the action is successful, the service sends back an HTTP 20O response with OK status on Postman with message.
+
+        return OK(new { message = "Book details updated Successfully." });
+
+-------------------------------------------------------------------------------------------------------------------------------
+    
+

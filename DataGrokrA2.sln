@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGrokrA2", "DataGrokrA2.csproj", "{A1F68C09-B0B1-4D70-922A-9CC6CD4115F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1F68C09-B0B1-4D70-922A-9CC6CD4115F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F68C09-B0B1-4D70-922A-9CC6CD4115F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F68C09-B0B1-4D70-922A-9CC6CD4115F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F68C09-B0B1-4D70-922A-9CC6CD4115F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6DCF7FA1-C457-4A3F-A94A-B4FBF9FE94E0}
+	EndGlobalSection
+EndGlobal
